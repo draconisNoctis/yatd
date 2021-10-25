@@ -3,7 +3,11 @@
     "compileOnSave": false,
     "compilerOptions": {
         "paths": {
-            "@yatd/engine": ["dist/yatd/engine/yatd-engine", "dist/yatd/engine"]
+            "@yatd/engine": [
+                "projects/yatd/engine/src/public-api.ts",
+                "dist/yatd/engine/yatd-engine",
+                "dist/yatd/engine"
+            ]
         },
         "baseUrl": "./",
         "outDir": "./dist/out-tsc",
