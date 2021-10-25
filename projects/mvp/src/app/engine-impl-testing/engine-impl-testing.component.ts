@@ -1,7 +1,10 @@
-import { AfterViewInit, ChangeDetectionStrategy, Component, NgZone, OnInit, ViewChild, ViewEncapsulation } from '@angular/core';
+import { AfterViewInit, ChangeDetectionStrategy, Component, NgZone, OnDestroy, OnInit, ViewChild, ViewEncapsulation } from '@angular/core';
 import { Color3, HemisphericLight, MeshBuilder, StandardMaterial, Vector3 } from '@babylonjs/core';
-import { BirdViewCamera, BirdViewCameraKeyboardInput, EngineComponent } from '@yatd/engine';
+import { BirdViewCamera, EngineComponent } from '@yatd/engine';
+import { KeyboardStateService } from '@yatd/keyboard';
 import { assert } from '@yatd/utils';
+import { Subject } from 'rxjs';
+import { takeUntil } from 'rxjs/operators';
 
 const BLOCK_SIZE = 1;
 const MAP_WIDTH = 20;
@@ -15,13 +18,20 @@ const MIN_DIFF = 0.1 ** 3;
     encapsulation: ViewEncapsulation.None,
     changeDetection: ChangeDetectionStrategy.OnPush
 })
-export class EngineImplTestingComponent implements OnInit, AfterViewInit {
+export class EngineImplTestingComponent implements OnInit, OnDestroy, AfterViewInit {
+    readonly destroyed$ = new Subject<void>();
+
     @ViewChild(EngineComponent, { static: true })
     engineComponent?: EngineComponent;
 
-    constructor(protected readonly ngZone: NgZone) {}
+    constructor(protected readonly ngZone: NgZone, protected readonly keyboardState: KeyboardStateService) {}
 
     ngOnInit(): void {}
+
+    ngOnDestroy(): void {
+        this.destroyed$.next();
+        this.destroyed$.complete();
+    }
 
     ngAfterViewInit(): void {
         const engine = this.engineComponent?.engine.value;
@@ -39,8 +49,24 @@ export class EngineImplTestingComponent implements OnInit, AfterViewInit {
             scene
         );
         cam.speed = 3;
-        cam.inputs.add(new BirdViewCameraKeyboardInput());
-        cam.attachControl();
+
+        const mapping: { axis: 'x' | 'z'; value: -1 | 0 | 1; keys: string[] }[] = [
+            { axis: 'z', value: 1, keys: ['KeyW', 'ArrowUp'] },
+            { axis: 'z', value: -1, keys: ['KeyS', 'ArrowDown'] },
+            { axis: 'x', value: -1, keys: ['KeyA', 'ArrowLeft'] },
+            { axis: 'x', value: 1, keys: ['KeyD', 'ArrowRight'] }
+        ];
+
+        this.keyboardState.pipe(takeUntil(this.destroyed$)).subscribe(state => {
+            cam.movement.x = 0;
+            cam.movement.z = 0;
+
+            for (const { axis, value, keys } of mapping) {
+                if (keys.some(key => state[key])) {
+                    cam.movement[axis] = value;
+                }
+            }
+        });
 
         const marker = MeshBuilder.CreateBox(
             'marker',
@@ -59,7 +85,7 @@ export class EngineImplTestingComponent implements OnInit, AfterViewInit {
 
         marker.material = markerMat;
 
-        scene.onPointerMove = (event, pickResult) => {
+        scene.onPointerMove = (_event, pickResult) => {
             if (!pickResult.pickedPoint) {
                 return;
             }
@@ -67,7 +93,7 @@ export class EngineImplTestingComponent implements OnInit, AfterViewInit {
             const x = pickResult.pickedPoint!.x | 0;
             const z = pickResult.pickedPoint!.z | 0;
 
-            if (x < 0 || x > MAP_WIDTH || z < 0 || z > MAP_HEIGHT) {
+            if (x < 0 || x >= MAP_WIDTH || z < 0 || z >= MAP_HEIGHT) {
                 marker.position.y = -1;
             } else {
                 marker.position.y = MIN_DIFF;
@@ -78,7 +104,7 @@ export class EngineImplTestingComponent implements OnInit, AfterViewInit {
 
         const light0 = new HemisphericLight('light0', new Vector3(1, 0, 0), scene);
 
-        const ground = MeshBuilder.CreateGround('ground', { width: MAP_WIDTH, height: MAP_HEIGHT }, scene);
+        const ground = MeshBuilder.CreateGround('ground', { width: MAP_WIDTH + 1, height: MAP_HEIGHT + 1 }, scene);
         ground.position.x = MAP_WIDTH / 2;
         ground.position.z = MAP_HEIGHT / 2;
 

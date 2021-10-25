@@ -177,6 +177,37 @@
                     }
                 }
             }
+        },
+        "@yatd/keyboard": {
+            "projectType": "library",
+            "root": "projects/yatd/keyboard",
+            "sourceRoot": "projects/yatd/keyboard/src",
+            "prefix": "lib",
+            "architect": {
+                "build": {
+                    "builder": "@angular-devkit/build-angular:ng-packagr",
+                    "options": {
+                        "project": "projects/yatd/keyboard/ng-package.json"
+                    },
+                    "configurations": {
+                        "production": {
+                            "tsConfig": "projects/yatd/keyboard/tsconfig.lib.prod.json"
+                        },
+                        "development": {
+                            "tsConfig": "projects/yatd/keyboard/tsconfig.lib.json"
+                        }
+                    },
+                    "defaultConfiguration": "production"
+                },
+                "test": {
+                    "builder": "@angular-devkit/build-angular:karma",
+                    "options": {
+                        "main": "projects/yatd/keyboard/src/test.ts",
+                        "tsConfig": "projects/yatd/keyboard/tsconfig.spec.json",
+                        "karmaConfig": "projects/yatd/keyboard/karma.conf.js"
+                    }
+                }
+            }
         }
     },
     "defaultProject": "mvp"
