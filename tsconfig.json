@@ -3,11 +3,8 @@
     "compileOnSave": false,
     "compilerOptions": {
         "paths": {
-            "@yatd/engine": [
-                "projects/yatd/engine/src/public-api.ts",
-                "dist/yatd/engine/yatd-engine",
-                "dist/yatd/engine"
-            ]
+            "@yatd/engine": ["projects/yatd/engine/src/public-api.ts", "dist/yatd/engine/yatd-engine", "dist/yatd/engine"],
+            "@yatd/utils": ["projects/yatd/utils/src/public-api.ts", "dist/yatd/utils/yatd-utils", "dist/yatd/utils"]
         },
         "baseUrl": "./",
         "outDir": "./dist/out-tsc",
@@ -21,7 +18,7 @@
         "experimentalDecorators": true,
         "moduleResolution": "node",
         "importHelpers": true,
-        "target": "es2017",
+        "target": "es2020",
         "module": "es2020",
         "lib": ["es2018", "dom"],
         "skipLibCheck": true

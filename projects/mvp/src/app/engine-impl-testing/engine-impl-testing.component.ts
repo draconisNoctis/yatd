@@ -1,12 +1,7 @@
-import { Component, OnInit, ViewEncapsulation, ChangeDetectionStrategy, ViewChild, AfterViewInit, NgZone } from '@angular/core';
-import { ArcRotateCamera, Color3, FlyCamera, FreeCamera, HemisphericLight, MeshBuilder, StandardMaterial, TargetCamera, Vector3 } from '@babylonjs/core';
+import { AfterViewInit, ChangeDetectionStrategy, Component, NgZone, OnInit, ViewChild, ViewEncapsulation } from '@angular/core';
+import { Color3, HemisphericLight, MeshBuilder, StandardMaterial, Vector3 } from '@babylonjs/core';
 import { BirdViewCamera, BirdViewCameraKeyboardInput, EngineComponent } from '@yatd/engine';
-
-const assert: (value: unknown, message?: string, ...args: unknown[]) => asserts value = console.assert as (
-    value: unknown,
-    message?: string,
-    ...args: unknown[]
-) => asserts value;
+import { assert } from '@yatd/utils';
 
 const BLOCK_SIZE = 1;
 const MAP_WIDTH = 20;
@@ -33,9 +28,9 @@ export class EngineImplTestingComponent implements OnInit, AfterViewInit {
         const scene = this.engineComponent?.scene.value;
         const canvas = this.engineComponent?.canvas.value;
 
-        assert(engine, '%s needs to be provided', 'Engine');
-        assert(scene, '%s needs to be provided', 'Scene');
-        assert(canvas, '%s needs to be provided', 'Canvas');
+        assert(engine, 'Engine needs to be provided');
+        assert(scene, 'Scene needs to be provided');
+        assert(canvas, 'Canvas needs to be provided');
 
         const cam = new BirdViewCamera(
             'cam0',
