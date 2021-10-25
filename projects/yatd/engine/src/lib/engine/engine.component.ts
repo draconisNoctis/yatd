@@ -5,9 +5,11 @@ import {
     Inject,
     Input,
     OnInit,
+    Output,
     PLATFORM_ID,
     Renderer2,
 } from '@angular/core';
+import { inject } from '@angular/core';
 import { Engine, Scene } from '@babylonjs/core';
 import { BehaviorSubject } from 'rxjs';
 
@@ -22,17 +24,19 @@ export class SceneObservable extends BehaviorSubject<Scene | null> {
         super(null);
     }
 }
+export class CanvasObservable extends BehaviorSubject<HTMLCanvasElement | null> {
+    constructor() {
+        super(null);
+    }
+}
 
 @Component({
     selector: 'yatd-engine',
-    templateUrl: './engine.component.html',
+    template: ``,
     styleUrls: ['./engine.component.scss'],
-    providers: [EngineObservable, SceneObservable],
+    providers: [EngineObservable, SceneObservable, CanvasObservable],
 })
 export class EngineComponent implements OnInit {
-    protected readonly engine?: Engine;
-    protected readonly scene?: Scene;
-
     @Input()
     set antialiasing(antialiasing: boolean | '' | undefined) {
         this._antialiasing =
@@ -40,11 +44,27 @@ export class EngineComponent implements OnInit {
     }
     private _antialiasing = false;
 
+    @Output()
+    get engine(): EngineObservable {
+        return this.engine$;
+    }
+
+    @Output()
+    get scene(): SceneObservable {
+        return this.scene$;
+    }
+
+    @Output()
+    get canvas(): CanvasObservable {
+        return this.canvas$;
+    }
+
     constructor(
         protected readonly elementRef: ElementRef<HTMLElement>,
         protected readonly renderer: Renderer2,
-        protected readonly engineObservable: EngineObservable,
-        protected readonly sceneObservable: SceneObservable,
+        protected readonly engine$: EngineObservable,
+        protected readonly scene$: SceneObservable,
+        protected readonly canvas$: CanvasObservable,
         @Inject(PLATFORM_ID) protected readonly platform: Object
     ) {}
 
@@ -58,7 +78,8 @@ export class EngineComponent implements OnInit {
         const engine = new Engine(canvas, this._antialiasing);
         const scene = new Scene(engine);
 
-        this.engineObservable.next(engine);
-        this.sceneObservable.next(scene);
+        this.engine.next(engine);
+        this.scene.next(scene);
+        this.canvas.next(canvas);
     }
 }
