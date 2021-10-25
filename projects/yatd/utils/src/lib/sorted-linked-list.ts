@@ -37,10 +37,57 @@ export class SortedLinkedList<T> {
         }
     }
 
+    clear(): void {
+        this.head = this.tail = undefined;
+    }
+
+    contains(value: T, priority?: number): boolean {
+        for (const current of this.notes()) {
+            if (current.value === value && (priority === undefined || current.priority === priority)) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    remove(value: T, priority?: number): boolean {
+        for (const current of this.notes()) {
+            if (current.value === value && (priority === undefined || current.priority === priority)) {
+                if (this.head === this.tail && this.head === current) {
+                    this.clear();
+                }
+                if (this.head === current) {
+                    this.head = current.next!;
+                    this.head.previous = undefined;
+                } else if (this.tail === current) {
+                    this.tail = current.previous!;
+                    this.tail.next = undefined;
+                } else {
+                    current.previous!.next = current.next;
+                    current.next!.previous = current.previous;
+                }
+                return true;
+            }
+        }
+        return false;
+    }
+
     *[Symbol.iterator](): Iterator<T> {
+        for (const current of this.notes()) {
+            yield current.value;
+        }
+    }
+
+    *entries(): IterableIterator<[T, number]> {
+        for (const current of this.notes()) {
+            yield [current.value, current.priority];
+        }
+    }
+
+    protected *notes(): IterableIterator<INode<T>> {
         let current = this.head;
         while (current) {
-            yield current.value;
+            yield current;
             assert(current !== current.next);
             current = current.next;
         }
@@ -54,7 +101,7 @@ export class SortedLinkedList<T> {
         const head = this.head;
 
         if (this.head === this.tail) {
-            this.head = this.tail = undefined;
+            this.clear();
         } else {
             this.head = head.next;
             this.head!.previous = undefined;

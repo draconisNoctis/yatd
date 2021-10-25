@@ -18,6 +18,58 @@ describe('SortedList', () => {
         list.add(33, 3);
 
         expect([...list]).toEqual([1, 2, 3, 33, 4, 44]);
+        expect([...list.entries()]).toEqual([
+            [1, 1],
+            [2, 2],
+            [3, 3],
+            [33, 3],
+            [4, 4],
+            [44, 4]
+        ]);
+    });
+
+    describe('contains', () => {
+        it('should indicate containing values/priorities', () => {
+            list.add(1, 1);
+            list.add(2, 2);
+            list.add(2, 3);
+
+            expect(list.contains(1)).toBeTrue();
+            expect(list.contains(2)).toBeTrue();
+            expect(list.contains(3)).toBeFalse();
+            expect(list.contains(1, 1)).toBeTrue();
+            expect(list.contains(1, 2)).toBeFalse();
+            expect(list.contains(2, 3)).toBeTrue();
+            expect(list.contains(2, 4)).toBeFalse();
+        });
+    });
+
+    describe('remove', () => {
+        it('should return first entry with matching value', () => {
+            list.add(1, 1);
+            list.add(1, 2);
+            list.add(1, 3);
+
+            list.remove(1);
+
+            expect([...list.entries()]).toEqual([
+                [1, 2],
+                [1, 3]
+            ]);
+        });
+
+        it('should return first entry with matching value and priority', () => {
+            list.add(1, 1);
+            list.add(1, 2);
+            list.add(1, 3);
+
+            list.remove(1, 2);
+
+            expect([...list.entries()]).toEqual([
+                [1, 1],
+                [1, 3]
+            ]);
+        });
     });
 
     describe('popHead', () => {
