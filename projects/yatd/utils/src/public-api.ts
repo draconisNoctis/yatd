@@ -3,3 +3,4 @@
  */
 
 export * from './lib/assert';
+export * from './lib/sorted-linked-list';
