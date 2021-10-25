@@ -1,4 +1,4 @@
-import { AfterViewInit, ChangeDetectionStrategy, Component, NgZone, OnDestroy, OnInit, ViewChild, ViewEncapsulation } from '@angular/core';
+import { AfterViewInit, ChangeDetectionStrategy, ChangeDetectorRef, Component, NgZone, OnDestroy, OnInit, ViewChild, ViewEncapsulation } from '@angular/core';
 import { Color3, HemisphericLight, MeshBuilder, StandardMaterial, Vector3 } from '@babylonjs/core';
 import { BirdViewCamera, EngineComponent } from '@yatd/engine';
 import { KeyboardStateService } from '@yatd/keyboard';
@@ -24,7 +24,10 @@ export class EngineImplTestingComponent implements OnInit, OnDestroy, AfterViewI
     @ViewChild(EngineComponent, { static: true })
     engineComponent?: EngineComponent;
 
-    constructor(protected readonly ngZone: NgZone, protected readonly keyboardState: KeyboardStateService) {}
+    fps?: number;
+    frameTime?: number;
+
+    constructor(protected readonly ngZone: NgZone, protected readonly keyboardState: KeyboardStateService, protected readonly cdr: ChangeDetectorRef) {}
 
     ngOnInit(): void {}
 
@@ -131,8 +134,15 @@ export class EngineImplTestingComponent implements OnInit, OnDestroy, AfterViewI
         }
 
         this.ngZone.runOutsideAngular(() => {
+            let counter = 0;
             engine.runRenderLoop(() => {
+                const start = performance.now();
                 scene.render();
+                this.fps = engine.getFps();
+                this.frameTime = performance.now() - start;
+                if (counter++ % 30 === 0) {
+                    this.cdr.detectChanges();
+                }
             });
         });
     }

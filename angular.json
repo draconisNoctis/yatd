@@ -208,6 +208,37 @@
                     }
                 }
             }
+        },
+        "@yatd/ui": {
+            "projectType": "library",
+            "root": "projects/yatd/ui",
+            "sourceRoot": "projects/yatd/ui/src",
+            "prefix": "lib",
+            "architect": {
+                "build": {
+                    "builder": "@angular-devkit/build-angular:ng-packagr",
+                    "options": {
+                        "project": "projects/yatd/ui/ng-package.json"
+                    },
+                    "configurations": {
+                        "production": {
+                            "tsConfig": "projects/yatd/ui/tsconfig.lib.prod.json"
+                        },
+                        "development": {
+                            "tsConfig": "projects/yatd/ui/tsconfig.lib.json"
+                        }
+                    },
+                    "defaultConfiguration": "production"
+                },
+                "test": {
+                    "builder": "@angular-devkit/build-angular:karma",
+                    "options": {
+                        "main": "projects/yatd/ui/src/test.ts",
+                        "tsConfig": "projects/yatd/ui/tsconfig.spec.json",
+                        "karmaConfig": "projects/yatd/ui/karma.conf.js"
+                    }
+                }
+            }
         }
     },
     "defaultProject": "mvp"
