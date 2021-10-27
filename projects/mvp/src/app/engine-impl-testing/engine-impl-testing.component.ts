@@ -1,14 +1,14 @@
 import { AfterViewInit, ChangeDetectionStrategy, ChangeDetectorRef, Component, NgZone, OnDestroy, OnInit, ViewChild, ViewEncapsulation } from '@angular/core';
-import { Color3, HemisphericLight, MeshBuilder, StandardMaterial, Vector3 } from '@babylonjs/core';
+import { Color3, Color4, HemisphericLight, MeshBuilder, StandardMaterial, Vector3 } from '@babylonjs/core';
 import { BirdViewCamera, EngineComponent } from '@yatd/engine';
 import { KeyboardStateService } from '@yatd/keyboard';
-import { assert } from '@yatd/utils';
+import { assert, Field2D, Map2D, PathfinderFactory, SortedLinkedList } from '@yatd/utils';
 import { Subject } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
 
 const BLOCK_SIZE = 1;
 const MAP_WIDTH = 20;
-const MAP_HEIGHT = 40;
+const MAP_HEIGHT = 20;
 const MIN_DIFF = 0.1 ** 3;
 
 @Component({
@@ -131,6 +131,43 @@ export class EngineImplTestingComponent implements OnInit, OnDestroy, AfterViewI
                 },
                 scene
             );
+        }
+
+        const map = Map2D.create(MAP_WIDTH, MAP_HEIGHT);
+
+        const pathfinder = PathfinderFactory.create<Field2D>(map);
+
+        for (let i = 0; i < 150; ++i) {
+            const z = (Math.random() * MAP_HEIGHT) | 0;
+            const x = (Math.random() * MAP_WIDTH) | 0;
+            map.get(x, z)!.blocked = true;
+        }
+
+        const start = performance.now();
+        const path = pathfinder.findShortestPath(map.get(0, 0)!, map.get(MAP_WIDTH - 1, MAP_HEIGHT - 1)!);
+        console.log('Found path in', performance.now() - start, 'ms');
+
+        const points: Vector3[] = [];
+
+        for (const field of path?.path ?? []) {
+            points.push(new Vector3(field.x + 0.5, MIN_DIFF * 2, field.z + 0.5));
+        }
+
+        const line = MeshBuilder.CreateLines('path', { points, colors: Array.from({ length: points.length }, () => new Color4(0, 1, 0, 1)) }, scene);
+        const pathMat = new StandardMaterial('pathMat', scene);
+
+        const blockerMat = new StandardMaterial('blockerMat', scene);
+        blockerMat.diffuseColor = new Color3(1, 1, 0);
+
+        for (const field of map.fields()) {
+            if (field.blocked) {
+                const blocker = MeshBuilder.CreatePlane(`field-blocker-${field.x}-${field.z}`, { size: 1 }, scene);
+                blocker.material = blockerMat;
+                blocker.position.y = MIN_DIFF;
+                blocker.position.x = field.x + 0.5;
+                blocker.position.z = field.z + 0.5;
+                blocker.rotation.x = Math.PI / 2;
+            }
         }
 
         this.ngZone.runOutsideAngular(() => {

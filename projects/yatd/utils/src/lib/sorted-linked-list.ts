@@ -41,6 +41,10 @@ export class SortedLinkedList<T> {
         this.head = this.tail = undefined;
     }
 
+    isEmpty(): boolean {
+        return !this.head;
+    }
+
     contains(value: T, priority?: number): boolean {
         for (const current of this.notes()) {
             if (current.value === value && (priority === undefined || current.priority === priority)) {
@@ -70,6 +74,15 @@ export class SortedLinkedList<T> {
             }
         }
         return false;
+    }
+
+    getPriority(value: T): number | undefined {
+        for (const current of this.notes()) {
+            if (current.value === value) {
+                return current.priority;
+            }
+        }
+        return undefined;
     }
 
     *[Symbol.iterator](): Iterator<T> {
