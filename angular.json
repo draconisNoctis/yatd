@@ -74,7 +74,8 @@
                         "inlineStyleLanguage": "scss",
                         "assets": ["projects/mvp/src/favicon.ico", "projects/mvp/src/assets"],
                         "styles": ["projects/mvp/src/styles.scss"],
-                        "scripts": []
+                        "scripts": [],
+                        "aot": true
                     },
                     "configurations": {
                         "production": {
@@ -260,7 +261,8 @@
                         "inlineStyleLanguage": "scss",
                         "assets": ["projects/model-viewer/src/favicon.ico", "projects/model-viewer/src/assets"],
                         "styles": ["projects/model-viewer/src/styles.scss"],
-                        "scripts": []
+                        "scripts": [],
+                        "aot": true
                     },
                     "configurations": {
                         "production": {
@@ -268,7 +270,7 @@
                                 {
                                     "type": "initial",
                                     "maximumWarning": "500kb",
-                                    "maximumError": "1mb"
+                                    "maximumError": "4mb"
                                 },
                                 {
                                     "type": "anyComponentStyle",
