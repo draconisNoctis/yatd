@@ -1,26 +1,34 @@
 {
-    "hosting": [
+  "hosting": [
+    {
+      "target": "model-viewer",
+      "public": "dist/model-viewer",
+      "ignore": [
+        "firebase.json",
+        "**/.*",
+        "**/node_modules/**"
+      ],
+      "rewrites": [
         {
-            "target": "model-viewer",
-            "public": "dist/model-viewer",
-            "ignore": ["firebase.json", "**/.*", "**/node_modules/**"],
-            "rewrites": [
-                {
-                    "source": "**",
-                    "destination": "/index.html"
-                }
-            ]
-        },
-        {
-            "target": "mvp",
-            "public": "dist/mvp",
-            "ignore": ["firebase.json", "**/.*", "**/node_modules/**"],
-            "rewrites": [
-                {
-                    "source": "**",
-                    "destination": "/index.html"
-                }
-            ]
+          "source": "**",
+          "destination": "/index.html"
         }
-    ]
+      ]
+    },
+    {
+      "target": "mvp",
+      "public": "dist/mvp",
+      "ignore": [
+        "firebase.json",
+        "**/.*",
+        "**/node_modules/**"
+      ],
+      "rewrites": [
+        {
+          "source": "**",
+          "destination": "/index.html"
+        }
+      ]
+    }
+  ]
 }
