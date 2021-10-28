@@ -1,9 +1,6 @@
-// yatd-engine {
-//     display: block;
-//     height: 100vh;
-//     width: 100vw;
-// }
 yatd-viewer {
+    display: block;
+
     .grid {
         display: grid;
         height: 100vh;
@@ -11,6 +8,17 @@ yatd-viewer {
         grid-template-columns: 1fr 1fr;
         grid-template-rows: 1fr 1fr;
         grid-gap: 1px;
+
+        &.zoom {
+            grid-template-columns: 1fr;
+            grid-template-rows: 1fr;
+            grid-gap: 0px;
+            overflow: hidden;
+
+            > canvas:not(:first-child) {
+                display: none;
+            }
+        }
 
         > canvas {
             height: 100%;

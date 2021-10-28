@@ -1,5 +1,5 @@
 <yatd-fps [fps]="fps" [frameTime]="frameTime"></yatd-fps>
-<div class="grid" #grid>
+<div class="grid" [class.zoom]="zoom$ | async" #grid>
     <canvas #3d touch-action="none"></canvas>
     <canvas #x touch-action="none"></canvas>
     <canvas #y touch-action="none"></canvas>

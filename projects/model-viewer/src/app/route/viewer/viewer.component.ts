@@ -1,4 +1,16 @@
-import { AfterViewInit, ChangeDetectionStrategy, ChangeDetectorRef, Component, ElementRef, NgZone, ViewChild, ViewEncapsulation } from '@angular/core';
+import { selectZoom } from './../../selectors/ui.selectors';
+import {
+    AfterViewInit,
+    ChangeDetectionStrategy,
+    ChangeDetectorRef,
+    Component,
+    ElementRef,
+    NgZone,
+    OnInit,
+    ViewChild,
+    ViewEncapsulation,
+    OnDestroy
+} from '@angular/core';
 import {
     ArcRotateCamera,
     Camera,
@@ -17,8 +29,12 @@ import {
     Vector3,
     VertexData
 } from '@babylonjs/core';
+import { Store } from '@ngrx/store';
 import { EngineComponent } from '@yatd/engine';
 import { assert } from '@yatd/utils';
+import { ModelViewerState } from '../../reducers';
+import { Subject } from 'rxjs';
+import { delay, takeUntil } from 'rxjs/operators';
 
 @Component({
     selector: 'yatd-viewer',
@@ -27,7 +43,7 @@ import { assert } from '@yatd/utils';
     encapsulation: ViewEncapsulation.None,
     changeDetection: ChangeDetectionStrategy.OnPush
 })
-export class ViewerComponent implements AfterViewInit {
+export class ViewerComponent implements OnDestroy, OnInit, AfterViewInit {
     @ViewChild('x', { static: true })
     canvasX?: ElementRef<HTMLCanvasElement>;
     @ViewChild('3d', { static: true })
@@ -40,7 +56,17 @@ export class ViewerComponent implements AfterViewInit {
     fps?: number;
     frameTime?: number;
 
-    constructor(protected readonly ngZone: NgZone, protected readonly cdr: ChangeDetectorRef) {}
+    protected readonly destroyed$ = new Subject<void>();
+    readonly zoom$ = this.store.select(selectZoom);
+
+    constructor(protected readonly ngZone: NgZone, protected readonly cdr: ChangeDetectorRef, protected readonly store: Store<ModelViewerState>) {}
+
+    ngOnDestroy(): void {
+        this.destroyed$.next();
+        this.destroyed$.complete();
+    }
+
+    ngOnInit(): void {}
 
     ngAfterViewInit(): void {
         assert(this.canvas3D, 'canvas3D need to be provieded');
