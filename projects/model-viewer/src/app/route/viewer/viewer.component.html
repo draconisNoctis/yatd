@@ -1,2 +1,8 @@
 <yatd-fps [fps]="fps" [frameTime]="frameTime"></yatd-fps>
-<yatd-engine antialiasing></yatd-engine>
+<div class="grid" #grid>
+    <canvas #3d touch-action="none"></canvas>
+    <canvas #x touch-action="none"></canvas>
+    <canvas #y touch-action="none"></canvas>
+    <canvas #z touch-action="none"></canvas>
+</div>
+<!-- <yatd-engine antialiasing [height]="300" [width]="400"></yatd-engine> -->

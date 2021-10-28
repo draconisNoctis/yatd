@@ -57,8 +57,14 @@
 /***************************************************************************************************
  * Zone JS is required by default for Angular itself.
  */
-import 'zone.js';  // Included with Angular CLI.
+const win = window as any;
+win.__Zone_disable_requestAnimationFrame = true;
+import 'zone.js'; // Included with Angular CLI.
 
+if (win.__zone_symbol__requestAnimationFrame) {
+    win.requestAnimationFrame = win.__zone_symbol__requestAnimationFrame;
+    win.cancelAnimationFrame = win.__zone_symbol__cancelAnimationFrame;
+}
 
 /***************************************************************************************************
  * APPLICATION IMPORTS
