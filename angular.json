@@ -2,7 +2,8 @@
     "$schema": "./node_modules/@angular/cli/lib/config/schema.json",
     "version": 1,
     "cli": {
-        "packageManager": "yarn"
+        "packageManager": "yarn",
+        "defaultCollection": "@ngrx/schematics"
     },
     "newProjectRoot": "projects",
     "schematics": {
@@ -71,10 +72,7 @@
                         "polyfills": "projects/mvp/src/polyfills.ts",
                         "tsConfig": "projects/mvp/tsconfig.app.json",
                         "inlineStyleLanguage": "scss",
-                        "assets": [
-                            "projects/mvp/src/favicon.ico",
-                            "projects/mvp/src/assets"
-                        ],
+                        "assets": ["projects/mvp/src/favicon.ico", "projects/mvp/src/assets"],
                         "styles": ["projects/mvp/src/styles.scss"],
                         "scripts": []
                     },
@@ -137,10 +135,7 @@
                         "tsConfig": "projects/mvp/tsconfig.spec.json",
                         "karmaConfig": "projects/mvp/karma.conf.js",
                         "inlineStyleLanguage": "scss",
-                        "assets": [
-                            "projects/mvp/src/favicon.ico",
-                            "projects/mvp/src/assets"
-                        ],
+                        "assets": ["projects/mvp/src/favicon.ico", "projects/mvp/src/assets"],
                         "styles": ["projects/mvp/src/styles.scss"],
                         "scripts": []
                     }
@@ -263,13 +258,8 @@
                         "polyfills": "projects/model-viewer/src/polyfills.ts",
                         "tsConfig": "projects/model-viewer/tsconfig.app.json",
                         "inlineStyleLanguage": "scss",
-                        "assets": [
-                            "projects/model-viewer/src/favicon.ico",
-                            "projects/model-viewer/src/assets"
-                        ],
-                        "styles": [
-                            "projects/model-viewer/src/styles.scss"
-                        ],
+                        "assets": ["projects/model-viewer/src/favicon.ico", "projects/model-viewer/src/assets"],
+                        "styles": ["projects/model-viewer/src/styles.scss"],
                         "scripts": []
                     },
                     "configurations": {
@@ -331,13 +321,8 @@
                         "tsConfig": "projects/model-viewer/tsconfig.spec.json",
                         "karmaConfig": "projects/model-viewer/karma.conf.js",
                         "inlineStyleLanguage": "scss",
-                        "assets": [
-                            "projects/model-viewer/src/favicon.ico",
-                            "projects/model-viewer/src/assets"
-                        ],
-                        "styles": [
-                            "projects/model-viewer/src/styles.scss"
-                        ],
+                        "assets": ["projects/model-viewer/src/favicon.ico", "projects/model-viewer/src/assets"],
+                        "styles": ["projects/model-viewer/src/styles.scss"],
                         "scripts": []
                     }
                 }
