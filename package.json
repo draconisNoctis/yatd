@@ -7,8 +7,8 @@
         "build": "ng build",
         "watch": "ng build --watch --configuration development",
         "test": "ng test",
-        "predeploy": "ng build mvp && ng build model-viewer",
-        "deploy": "firebase deploy"
+        "build:all": "ng build mvp && ng build model-viewer",
+        "deploy": "npm run build:all && firebase deploy"
     },
     "private": true,
     "dependencies": {

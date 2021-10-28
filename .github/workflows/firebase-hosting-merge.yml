@@ -17,7 +17,7 @@ jobs:
               with:
                   node-version: "${{ steps.nvm.outputs.NVMRC }}"
             - run: yarn && yarn global add -g @angular/cli@12.2.11
-            - run: yarn deploy
+            - run: yarn buil:all
             - uses: FirebaseExtended/action-hosting-deploy@v0
               with:
                   repoToken: "${{ secrets.GITHUB_TOKEN }}"
