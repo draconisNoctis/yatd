@@ -1,0 +1,17 @@
+{
+  "projects": {
+    "default": "yatd-dev"
+  },
+  "targets": {
+    "yatd-dev": {
+      "hosting": {
+        "model-viewer": [
+          "yatd--model-viewer"
+        ],
+        "mvp": [
+          "yatd--mvp"
+        ]
+      }
+    }
+  }
+}
