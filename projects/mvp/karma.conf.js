@@ -3,7 +3,7 @@
 
 module.exports = function (config) {
     config.set(
-        require('../../../karma-base')({
+        require('../../karma-base')({
             config,
             pathname: 'mvp'
         })
