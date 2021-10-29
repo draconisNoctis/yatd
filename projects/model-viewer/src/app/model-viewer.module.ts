@@ -1,3 +1,4 @@
+import { YatdObjectsModule } from '@yatd/objects';
 import { NgModule } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
 import { EngineModule } from '@yatd/engine';
@@ -22,7 +23,8 @@ import { UiEffects } from './effects/ui.effects';
         YatdUiModule,
         StoreModule.forRoot(reducers, { metaReducers }),
         !environment.production ? StoreDevtoolsModule.instrument() : [],
-        EffectsModule.forRoot([UiEffects])
+        EffectsModule.forRoot([UiEffects]),
+        YatdObjectsModule
     ],
     providers: [],
     bootstrap: [ModelViewerComponent]

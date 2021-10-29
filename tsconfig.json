@@ -5,6 +5,7 @@
         "paths": {
             "@yatd/engine": ["projects/yatd/engine/src/public-api.ts", "dist/yatd/engine/yatd-engine", "dist/yatd/engine"],
             "@yatd/keyboard": ["projects/yatd/keyboard/src/public-api.ts", "dist/yatd/keyboard/yatd-keyboard", "dist/yatd/keyboard"],
+            "@yatd/objects": ["projects/yatd/objects/src/public-api.ts", "dist/yatd/objects/yatd-objects", "dist/yatd/objects"],
             "@yatd/ui": ["projects/yatd/ui/src/public-api.ts", "dist/yatd/ui/yatd-ui", "dist/yatd/ui"],
             "@yatd/utils": ["projects/yatd/utils/src/public-api.ts", "dist/yatd/utils/yatd-utils", "dist/yatd/utils"]
         },
