@@ -1,3 +1,5 @@
+@use '~@angular/material' as mat;
+
 html,
 body {
     margin: 0;
@@ -8,3 +10,24 @@ html {
     font-size: 62.5%;
     font-family: Arial, Helvetica, sans-serif;
 }
+
+@include mat.core();
+
+$primary: mat.define-palette(mat.$indigo-palette, 300);
+$accent: mat.define-palette(mat.$yellow-palette, 500);
+$error: mat.define-palette(mat.$red-palette);
+$warn: mat.define-palette(mat.$orange-palette);
+
+$theme: mat.define-light-theme(
+    (
+        color: (
+            primary: $primary,
+            accent: $accent,
+            error: $error,
+            warn: $warn
+        )
+    )
+);
+
+// @include mat.core-theme($theme);
+@include mat.all-component-themes($theme);
