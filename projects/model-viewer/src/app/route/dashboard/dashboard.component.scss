@@ -1,0 +1,20 @@
+yatd-dashboard {
+    > div {
+        width: 100%;
+        max-width: 98rem;
+        margin: 2rem auto;
+
+        // table {
+        //     width: 100%;
+        // }
+
+        .mat-column-name {
+            flex-grow: 2;
+        }
+
+        .mat-column-actions {
+            flex-grow: 0.5;
+            justify-content: flex-end;
+        }
+    }
+}

@@ -10,25 +10,10 @@ import {
     ViewChild,
     ViewEncapsulation
 } from '@angular/core';
-import {
-    ArcRotateCamera,
-    Color3,
-    DynamicTexture,
-    Engine,
-    HemisphericLight,
-    Light,
-    Mesh,
-    MeshBuilder,
-    Node,
-    Scene,
-    StandardMaterial,
-    TargetCamera,
-    TransformNode,
-    Vector3,
-    VertexData
-} from '@babylonjs/core';
+import { ActivatedRoute } from '@angular/router';
+import { ArcRotateCamera, Engine, HemisphericLight, Light, Scene, TargetCamera, Vector3 } from '@babylonjs/core';
 import { Store } from '@ngrx/store';
-import { ObjectRegistryService } from '@yatd/engine';
+import { CreatorTypes, ObjectRegistryService } from '@yatd/engine';
 import { assert } from '@yatd/utils';
 import { Subject } from 'rxjs';
 import { ModelViewerState } from '../../reducers';
@@ -61,7 +46,8 @@ export class ViewerComponent implements OnDestroy, OnInit, AfterViewInit {
         protected readonly ngZone: NgZone,
         protected readonly cdr: ChangeDetectorRef,
         protected readonly store: Store<ModelViewerState>,
-        protected readonly objectRegistry: ObjectRegistryService
+        protected readonly objectRegistry: ObjectRegistryService,
+        protected readonly route: ActivatedRoute
     ) {}
 
     ngOnDestroy(): void {
@@ -84,20 +70,23 @@ export class ViewerComponent implements OnDestroy, OnInit, AfterViewInit {
         const camera = this.initCamera(scene, this.canvas3D.nativeElement);
         engine.registerView(this.canvas3D.nativeElement);
 
-        const camX = this.initAxisCamera(scene, 'x');
-        engine.registerView(this.canvasX.nativeElement, camX);
-        const camY = this.initAxisCamera(scene, 'y');
-        engine.registerView(this.canvasY.nativeElement, camY);
-        const camZ = this.initAxisCamera(scene, 'z');
-        engine.registerView(this.canvasZ.nativeElement, camZ);
+        const camX = this.initAxisCamera(scene, 'x', this.canvasX.nativeElement);
+        const camY = this.initAxisCamera(scene, 'y', this.canvasY.nativeElement);
+        const camZ = this.initAxisCamera(scene, 'z', this.canvasZ.nativeElement);
 
         this.initLightning(scene);
-        const model = await this.objectRegistry.create('mesh', 'tower01', scene);
-        const axis = await this.objectRegistry.create('transformNode', 'axis_indicator', scene);
+        await this.objectRegistry.create('transformNode', 'axis_indicator', scene);
+
+        const { type, id } = this.route.snapshot.params as { type: CreatorTypes; id: string };
+
+        const model = await this.objectRegistry.create(type, id, scene);
 
         this.ngZone.runOutsideAngular(() => {
             let counter = 0;
             engine.runRenderLoop(() => {
+                camX.position.x = -camera.radius;
+                camY.position.y = camera.radius;
+                camZ.position.z = -camera.radius;
                 const start = performance.now();
                 scene.render();
                 this.fps = engine.getFps();
@@ -116,11 +105,14 @@ export class ViewerComponent implements OnDestroy, OnInit, AfterViewInit {
         return camera;
     }
 
-    protected initAxisCamera(scene: Scene, axis: 'x' | 'y' | 'z') {
+    protected initAxisCamera(scene: Scene, axis: 'x' | 'y' | 'z', canvas: HTMLCanvasElement) {
         const pos = Vector3.Zero();
         pos[axis] = axis === 'y' ? 10 : -10;
         const cam = new TargetCamera(`camera-${axis}-axis`, pos, scene);
         cam.target = Vector3.Zero();
+
+        scene.getEngine().registerView(canvas, cam);
+
         return cam;
     }
 

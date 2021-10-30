@@ -7,7 +7,6 @@ import { YatdUiModule } from '@yatd/ui';
 
 import { AppRoutingModule } from './app-routing.module';
 import { ModelViewerComponent } from './model-viewer.component';
-import { ViewerComponent } from './route/viewer/viewer.component';
 import { StoreModule } from '@ngrx/store';
 import { reducers, metaReducers } from './reducers';
 import { StoreDevtoolsModule } from '@ngrx/store-devtools';
@@ -16,7 +15,7 @@ import { EffectsModule } from '@ngrx/effects';
 import { UiEffects } from './effects/ui.effects';
 
 @NgModule({
-    declarations: [ModelViewerComponent, ViewerComponent],
+    declarations: [ModelViewerComponent],
     imports: [
         BrowserModule,
         AppRoutingModule,
