@@ -3,6 +3,7 @@ import { ObjectDefinition, TransformNodeCreator } from '@yatd/engine';
 
 export const axis_indicator: ObjectDefinition<TransformNodeCreator> = {
     id: 'axis_indicator',
+    internal: true,
     creator: {
         type: 'transformNode',
         create: (scene: Scene) => import('./factory').then(f => f.create(scene))

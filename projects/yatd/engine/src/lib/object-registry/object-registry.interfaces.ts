@@ -2,6 +2,7 @@ import { AbstractMesh, AssetContainer, Scene, TransformNode } from '@babylonjs/c
 
 export interface ObjectDefinition<T extends Creators> {
     id: string;
+    internal?: boolean;
     title?: string;
     description?: string;
     creator: T;
